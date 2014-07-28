@@ -12,7 +12,7 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.ui.UI;
 
-@Theme("mytheme")
+@Theme("dashboard")
 @SuppressWarnings("serial")
 public class MyVaadinUI extends UI 
 {
@@ -28,6 +28,8 @@ public class MyVaadinUI extends UI
 
     @Override
     protected void init(VaadinRequest request) {
+    	
+    	addStyleName("root");
     	
     	//agregando navigator
     	navigator = new Navigator(this,this);

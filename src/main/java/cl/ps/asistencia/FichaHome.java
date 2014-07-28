@@ -1,5 +1,6 @@
 package cl.ps.asistencia;
 
+import com.vaadin.annotations.Theme;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
@@ -19,6 +20,7 @@ import com.vaadin.ui.TextField;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
+@Theme("dashboard")
 public class FichaHome extends Panel implements View {
 
 	/**
@@ -32,11 +34,12 @@ public class FichaHome extends Panel implements View {
 		
 		//utiliza todo el espacio
 		setSizeFull();
-
+		addStyleName("dashboard-view");
 		//crea el contenedor
-		VerticalLayout raiz = new VerticalLayout();
+		CssLayout raiz = new CssLayout();
 		raiz.setSizeFull();
-		raiz.setSpacing(true);
+		raiz.addStyleName("view-content");
+		raiz.addStyleName("main-view");
 		setContent(raiz);
 		
 		HorizontalLayout top = drawTop();
@@ -45,13 +48,13 @@ public class FichaHome extends Panel implements View {
 		HorizontalSplitPanel vsl = drawContent(); 
 				
 		raiz.addComponent(vsl);
-		raiz.setExpandRatio(vsl, 1.0F);
 		
 	}
 	
 
 	private HorizontalSplitPanel drawContent() {
 		HorizontalSplitPanel hsp = new HorizontalSplitPanel();
+		hsp.addStyleName("layout-panel");
 		hsp.setSplitPosition(15);
 		
 		hsp.setFirstComponent(new CssLayout(){{
