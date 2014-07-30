@@ -56,6 +56,7 @@ public class CSV extends Panel implements View {
 		Wizard wizard = new Wizard();
 		
 		wizard.addStep(new SubirArchivo());
+		wizard.addStep(new AgregarParametros());
 		wizard.addStep(new GenerarExcel());
 		wizard.addStep(new TransformarExcel());
 	   	   
@@ -85,7 +86,6 @@ public class CSV extends Panel implements View {
 
 	@Override
 	public void enter(ViewChangeEvent event) {
-		// TODO Auto-generated method stub
 		
 	}
 	

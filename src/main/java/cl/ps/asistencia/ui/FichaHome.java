@@ -1,6 +1,11 @@
 package cl.ps.asistencia.ui;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.vaadin.annotations.Theme;
+import com.vaadin.data.Property;
+import com.vaadin.data.Property.ValueChangeEvent;
 import com.vaadin.navigator.View;
 import com.vaadin.navigator.ViewChangeListener.ViewChangeEvent;
 import com.vaadin.server.FontAwesome;
@@ -16,9 +21,10 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Image;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.NativeButton;
+import com.vaadin.ui.Notification;
+import com.vaadin.ui.Notification.Type;
 import com.vaadin.ui.Panel;
 import com.vaadin.ui.TextField;
-import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 
 @Theme("dashboard")
@@ -82,6 +88,7 @@ public class FichaHome extends Panel implements View {
 	    
 	}
 	
+	HorizontalSplitPanel hsp;
 
 	private CssLayout drawContent() {
 		
@@ -89,7 +96,7 @@ public class FichaHome extends Panel implements View {
 		contenido.setSizeFull();
 		contenido.addStyleName("layout-panel");
 		
-		HorizontalSplitPanel hsp = new HorizontalSplitPanel();
+		hsp = new HorizontalSplitPanel();
 		contenido.addComponent(hsp);
 		hsp.setSplitPosition(15);
 		
@@ -100,22 +107,41 @@ public class FichaHome extends Panel implements View {
 					addComponent(
 							new CssLayout(){{
 								addStyleName("menu2"); 
-								int i = 0;
-								for(String s : new String[]{ "Jose perez" ,"Jorge Saavedra", "Patricio Torres", "Carlos Cornejo"} ){
-									Button b = new NativeButton(s);
-									if(i == 0)
+								for(final Viejo s : viejos){
+									Button b = new NativeButton(s.getNombre());
+									if(s.getCarita() == 0)
 										b.setIcon(FontAwesome.SMILE_O);
-									else if(i == 1)
+									else if(s.getCarita() == 1)
 										b.setIcon(FontAwesome.FROWN_O);
 									else
 										b.setIcon(FontAwesome.MEH_O);
+									
+									b.addClickListener(new Button.ClickListener() {
+										
+										@Override
+										public void buttonClick(ClickEvent event) {
+											setContent(s);
+											
+										}
+									});
 									addComponent(b);
-									i++;
+
 								}
 						}});
 								
 				}});
-		
+		setContent(viejos.get(0));
+		return contenido;
+	}
+	
+	List<Viejo> viejos = Arrays.asList(
+			new Viejo("Jose Perez","11111-1","915.JPG",0),
+			new Viejo("Jorge Saavedra","222222-1","914.JPG",1),
+			new Viejo("Patricio Torres","3333333-1","41.JPG",2),
+			new Viejo("Carlos Cornejo","4444444-1","4.JPG",1)
+			);
+	
+	private void setContent(final Viejo viejo){
 		hsp.setSecondComponent(new CssLayout(){{
 			HorizontalLayout top = new HorizontalLayout();
 			top.setSpacing(true);
@@ -123,7 +149,7 @@ public class FichaHome extends Panel implements View {
 			
 			// A theme resource in the current theme ("mytheme")
 			// Located in: VAADIN/themes/mytheme/img/themeimage.png
-			ThemeResource resource = new ThemeResource("img/915.JPG");
+			ThemeResource resource = new ThemeResource("img/"+viejo.getFoto());
 			Image img = new Image(null, resource);
 			img.setWidth("140px");
 			img.setHeight("160px");
@@ -132,13 +158,11 @@ public class FichaHome extends Panel implements View {
 			VerticalLayout vl = new VerticalLayout();
 			top.addComponent(vl);
 			
-			vl.addComponent(new Label("<h1>Jose Perez</h1>",ContentMode.HTML));
-			vl.addComponent(new Label("<h3>111111-1</h3>",ContentMode.HTML));
-			
+			vl.addComponent(new Label("<h1>"+viejo.getNombre()+"</h1>",ContentMode.HTML));
+			vl.addComponent(new Label("<h3>"+viejo.getRut()+"</h3>",ContentMode.HTML));
+			vl.addComponent(new Label("<p>Otra información......</p>",ContentMode.HTML));
 			
 		}});
-
-		return contenido;
 	}
 
 
@@ -155,29 +179,52 @@ public class FichaHome extends Panel implements View {
 		
 		HorizontalLayout hl2 = new HorizontalLayout();
 		hl2.setSpacing(true);
-		TextField nombre = new TextField("Nombre");
+		final TextField nombre = new TextField("Nombre");
 		hl2.addComponent(nombre);
 		hl2.setComponentAlignment(nombre, Alignment.BOTTOM_LEFT);
 		
 		Button btn = new Button(null,FontAwesome.SEARCH );
+		btn.addClickListener(new Button.ClickListener() {
+			
+			@Override
+			public void buttonClick(ClickEvent event) {
+				Notification.show("Filtrando por nombre "+nombre.getValue(),Type.HUMANIZED_MESSAGE);
+			}
+		});
 		hl2.addComponent(btn);
 		hl2.setComponentAlignment(btn, Alignment.BOTTOM_LEFT);
 		
 		hl.addComponent(hl2);
 		
-		ComboBox cb = new ComboBox("Estado");
+		final ComboBox cb = new ComboBox("Estado");
 		cb.addItem("Vigente");
 		cb.addItem("No Vigente");
 		cb.setNullSelectionAllowed(false);
 		cb.select("Vigente");
+		cb.addValueChangeListener(new Property.ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				Notification.show("Filtrando por estado "+cb.getValue(),Type.HUMANIZED_MESSAGE);
+			}
+		});
+		
 		hl2.addComponent(cb);
 		
-		ComboBox cb2 = new ComboBox("Faena");
+		final ComboBox cb2 = new ComboBox("Faena");
 		cb2.addItem("Faena1");
 		cb2.addItem("Faena2");
 		cb2.addItem("Faena3");
 		cb2.setNullSelectionAllowed(false);
 		cb2.select("Faena1");
+		cb2.addValueChangeListener(new Property.ValueChangeListener() {
+			
+			@Override
+			public void valueChange(ValueChangeEvent event) {
+				Notification.show("Filtrando por faena "+cb2.getValue(),Type.HUMANIZED_MESSAGE);
+			}
+		});
+		
 		hl2.addComponent(cb2);
 		
 		return contenido;
@@ -187,6 +234,46 @@ public class FichaHome extends Panel implements View {
 	@Override
 	public void enter(ViewChangeEvent event) {
 
+	}
+	
+	public class Viejo{
+		String nombre;
+		String rut;
+		int carita;
+		String foto;
+		
+		public Viejo(String nombre, String rut, String foto, int carita) {
+			super();
+			this.nombre = nombre;
+			this.rut = rut;
+			this.carita = carita;
+			this.foto = foto;
+		}
+		public String getNombre() {
+			return nombre;
+		}
+		public void setNombre(String nombre) {
+			this.nombre = nombre;
+		}
+		public String getRut() {
+			return rut;
+		}
+		public void setRut(String rut) {
+			this.rut = rut;
+		}
+		public int getCarita() {
+			return carita;
+		}
+		public void setCarita(int carita) {
+			this.carita = carita;
+		}
+		public String getFoto() {
+			return foto;
+		}
+		public void setFoto(String foto) {
+			this.foto = foto;
+		}
+		
 	}
 
 }

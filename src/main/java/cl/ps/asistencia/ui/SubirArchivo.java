@@ -68,6 +68,7 @@ public class SubirArchivo implements WizardStep {
              /* Let's build a container from the CSV File */
              FileReader reader = new FileReader(tempFile);
              IndexedContainer indexedContainer = buildContainerFromCSV(reader);
+             GenerarExcel.indexedContainer = indexedContainer;
              reader.close();
              tempFile.delete();
     
@@ -93,13 +94,11 @@ public class SubirArchivo implements WizardStep {
 
 	@Override
 	public boolean onAdvance() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean onBack() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -140,12 +139,10 @@ public class SubirArchivo implements WizardStep {
      * @param columnHeaders The column headers, i.e. the first row from the CSV file
      */
     private void addItemProperties(IndexedContainer container, String[] columnHeaders) {
-  	  logger.debug("size "+columnHeaders.length );
+  	  
       for (String propertyName : columnHeaders) {
-      	logger.debug(" propertyName "+propertyName);
         container.addContainerProperty(propertyName, String.class, null);
       }
-      logger.debug(" ");
     }
    
     /**
@@ -157,7 +154,7 @@ public class SubirArchivo implements WizardStep {
      * @param fields
      */
     private void addItem(IndexedContainer container, String[] propertyIds, String[] fields) {
-  	  logger.debug("propertyIds.length "+propertyIds.length+ " fields.length "+ fields.length );
+  	  
       if (propertyIds.length != fields.length) {
         throw new IllegalArgumentException("Hmmm - Different number of columns to fields in the record");
       }
