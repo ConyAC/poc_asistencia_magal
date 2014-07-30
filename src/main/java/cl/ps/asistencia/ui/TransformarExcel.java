@@ -63,7 +63,7 @@ public class TransformarExcel implements WizardStep {
        });
        
        String basepath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath();
-       final File actualFile = new File(basepath +"\\VAADIN\\descargas\\softland.csv");
+       final File actualFile = new File(basepath +"/VAADIN/descargas/softland.csv");
        
        final Button saveExcel = new Button("Generar archivo Softland - Debe subir archivo excel modificado");
        saveExcel.setEnabled(false);
@@ -92,13 +92,13 @@ public class TransformarExcel implements WizardStep {
                       
                      switch(cell.getCellType()) {
                          case Cell.CELL_TYPE_BOOLEAN:
-                        	 out.write((cell.getBooleanCellValue() + ";\t\t").getBytes());
+                        	 out.write((cell.getBooleanCellValue() + ";").getBytes());
                              break;
                          case Cell.CELL_TYPE_NUMERIC:
-                        	 out.write((cell.getNumericCellValue() + ";\t\t").getBytes());
+                        	 out.write((cell.getNumericCellValue() + ";").getBytes());
                              break;
                          case Cell.CELL_TYPE_STRING:
-                             out.write((cell.getStringCellValue() + ";\t\t").getBytes());
+                             out.write((cell.getStringCellValue() + ";").getBytes());
                              break;
                      }
                  }

@@ -43,11 +43,11 @@ public class GenerarExcel implements WizardStep {
 		
 		String basepath = VaadinService.getCurrent()
 	            .getBaseDirectory().getAbsolutePath();
-		File actualFile = new File(basepath +"\\VAADIN\\descargas\\CR_4B_Asistencia.xls");
+		File actualFile = new File(basepath +"/VAADIN/descargas/CR_4B_Asistencia.xls");
 		logger.debug("generar excel");
 		try {
 			
-			File upload = new File(basepath+ "\\VAADIN\\plantilla\\CR_4B_Asistencia_Julio_2014.xls");
+			File upload = new File(basepath+ "/VAADIN/plantilla/CR_4B_Asistencia_Julio_2014.xls");
 			FileInputStream file = new FileInputStream(upload);
 			logger.debug("modificando archivo plantilla "+upload.getAbsolutePath());
 		    HSSFWorkbook workbook = new HSSFWorkbook(file);
